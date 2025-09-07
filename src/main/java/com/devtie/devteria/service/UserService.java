@@ -38,15 +38,8 @@ public class UserService {
     PasswordEncoder encoder;
 
     public UserResponse createUser(UserCreationRequest request) {
-        // if (userRepository.existsByUserName(request.getUserName())) {
-        // throw new AppException(ErrorCode.USERNAME_ALREADY_EXISTS);
-        // }
-        User user = userMapper.toUser(request); // thay cho tất cả các trường hợp set trực tiếp thay cho phần ở dưới
-        // user.setUserName(request.getUserName());
-        // user.setPassWord(request.getPassWord());
-        // user.setFirstName(request.getFirstName());
-        // user.setLastName(request.getLastName());
-        // user.setDob(request.getDob());
+        log.info("Service: Create User");
+        User user = userMapper.toUser(request);
 
         user.setPassWord(encoder.encode(user.getPassWord())); // mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         HashSet<Role> roles = new HashSet<>();
@@ -88,11 +81,7 @@ public class UserService {
 
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        userMapper.updateUser(user, request); // sử dụng mapper để cập nhật các trường thay vì set trực tiếp
-        // user.setPassWord(request.getPassWord());
-        // user.setFirstName(request.getFirstName());
-        // user.setLastName(request.getLastName());
-        // user.setDob(request.getDob());
+        userMapper.updateUser(user, request);
         user.setPassWord(encoder.encode(request.getPassWord()));
 
         var roles = roleRepository.findAllById(request.getRoles());
@@ -100,6 +89,7 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }

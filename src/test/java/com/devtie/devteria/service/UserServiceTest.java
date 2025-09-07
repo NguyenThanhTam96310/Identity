@@ -14,9 +14,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.devtie.devteria.dto.request.UserCreationRequest;
 import com.devtie.devteria.dto.response.UserResponse;
@@ -35,7 +36,7 @@ public class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    @MockBean
+    @MockitoBean
     private UserRepository userRepository;
 
     private UserCreationRequest request;
@@ -88,16 +89,20 @@ public class UserServiceTest {
     @Test
     void createUser_userExitsted_fail() {
         // Given
-        Mockito.when(userRepository.existsByUserName(anyString())).thenReturn(true);
+        //        Mockito.when(userRepository.existsByUserName(anyString())).thenReturn(true);
+        Mockito.when(userRepository.save(any(User.class)))
+                .thenThrow(new DataIntegrityViolationException("Username already exists"));
 
         // When
         var exception = assertThrows(AppException.class, () -> userService.createUser(request));
+
         Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1001);
+        Assertions.assertThat(exception.getErrorCode().getMessage()).isEqualTo("Username already exists");
     }
 
     @Test
     @WithMockUser(username = "john123") // có thể hash role vào
-    void getMyInfo_vailid_succuss() {
+    void getMyInfo_vaild_succuss() {
         // mock repository qua
         Mockito.when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
 

@@ -86,7 +86,7 @@ public class UserControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1000))
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("result.userName").value("john123"))
                 .andExpect(MockMvcResultMatchers.jsonPath("result.firstName").value("John"))
                 .andExpect(MockMvcResultMatchers.jsonPath("result.lastName").value("Doe"));

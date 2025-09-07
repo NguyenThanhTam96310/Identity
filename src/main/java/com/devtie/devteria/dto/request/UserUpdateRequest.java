@@ -29,7 +29,7 @@ public class UserUpdateRequest {
     @Size(min = 2, message = "INVALID_REQUEST_LASTNAME")
     String lastName;
 
-    @DobConstraint(min = 18, message = "INVALID_DOB")
+    @DobConstraint(min = 16, message = "INVALID_DOB")
     LocalDate dob;
 
     List<String> roles;

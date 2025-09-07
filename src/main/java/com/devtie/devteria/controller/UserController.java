@@ -36,7 +36,6 @@ public class UserController {
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         log.info("Controller : Create user");
-
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setResult(userService.createUser(request));
         return response;
@@ -44,11 +43,11 @@ public class UserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() {
-        var authenticattion = SecurityContextHolder.getContext().getAuthentication();
-        log.info("UserName: {}", authenticattion.getName());
-        authenticattion.getAuthorities().forEach(authority -> {
-            log.info("roles: {}", authority.getAuthority());
-        });
+//        var authenticattion = SecurityContextHolder.getContext().getAuthentication();
+//        log.info("UserName: {}", authenticattion.getName());
+//        authenticattion.getAuthorities().forEach(authority -> {
+//            log.info("roles: {}", authority.getAuthority());
+//        });
 
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())
@@ -70,8 +69,10 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    UserResponse updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
-        return userService.updateUser(userId, request);
+    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateUser(userId, request))
+                .build();
     }
 
     @DeleteMapping("/{userId}")

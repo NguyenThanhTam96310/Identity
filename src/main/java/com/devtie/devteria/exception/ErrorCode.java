@@ -11,6 +11,7 @@ public enum ErrorCode {
     DATABASE_ERROR(1003, "Database error occurred", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_CREDENTIALS(1004, "Invalid credentials provided", HttpStatus.UNAUTHORIZED),
     ROLE_NOT_FOUND(1005, "Role not found", HttpStatus.NOT_FOUND),
+    PERMISSION_NOT_FOUND(1006, "Permission not found", HttpStatus.NOT_FOUND),
 
     // Authentication errors
     USERNAME_NOT_FOUND(1005, "Username not found", HttpStatus.NOT_FOUND),

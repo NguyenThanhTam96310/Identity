@@ -2,6 +2,9 @@ package com.devtie.devteria.service;
 
 import java.util.List;
 
+import com.devtie.devteria.entity.Role;
+import com.devtie.devteria.exception.AppException;
+import com.devtie.devteria.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 
 import com.devtie.devteria.dto.request.PermissionRequest;
@@ -37,6 +40,8 @@ public class PermissionService {
     }
 
     public void delete(String permission) {
+        Permission per = permissionRepository.findById(permission).orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_FOUND));
+
         permissionRepository.deleteById(permission);
     }
 }

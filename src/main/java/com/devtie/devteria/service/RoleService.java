@@ -3,6 +3,10 @@ package com.devtie.devteria.service;
 import java.util.HashSet;
 import java.util.List;
 
+import com.devtie.devteria.entity.Role;
+import com.devtie.devteria.entity.User;
+import com.devtie.devteria.exception.AppException;
+import com.devtie.devteria.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 
 import com.devtie.devteria.dto.request.RoleRequest;
@@ -39,6 +43,7 @@ public class RoleService {
     }
 
     public void deleteRole(String id) {
+        Role role = roleRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
         roleRepository.deleteById(id);
     }
 }

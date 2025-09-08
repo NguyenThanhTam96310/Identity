@@ -26,15 +26,15 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class PermissionController {
-    PermissionService permissionService;
+      PermissionService permissionService;
 
     @PostMapping
-    public ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
+    public ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request){
+        log.info("per controller: create");
         return ApiResponse.<PermissionResponse>builder()
                 .result(permissionService.create(request))
                 .build();
     }
-
     @GetMapping
     public ApiResponse<List<PermissionResponse>> getAllPermissions() {
         return ApiResponse.<List<PermissionResponse>>builder()

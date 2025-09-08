@@ -47,7 +47,7 @@ public class UserControllerTest {
     private LocalDate dob;
     private Role role;
 
-    @BeforeEach // chạy phương thức này đầu tiên trc khi chạy test khác
+    @BeforeEach // chạy phương thức này đầu tiên trc khi chạy test
     void initData() {
         dob = LocalDate.of(1990, 1, 1);
         request = UserCreationRequest.builder()
@@ -194,9 +194,7 @@ public class UserControllerTest {
 
     // UpdateUser Test
     @Test
-    @WithMockUser(
-            username = "john123",
-            roles = {"USER"})
+    @WithMockUser(username = "john123")
     void updateUser_validRequest_success() throws Exception {
         // GIVEN nhứng dl đầu vào và dự doán trc
         ObjectMapper objectMapper = new ObjectMapper();
@@ -220,9 +218,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(
-            username = "john123",
-            roles = {"USER"})
+    @WithMockUser(username = "john123")
     void updateUser_passwordInvalid_fail() throws Exception {
         // GIVEN
         updateRequest.setPassWord("123456");
@@ -241,9 +237,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(
-            username = "john123",
-            roles = {"USER"})
+    @WithMockUser(username = "john123")
     void updateUser_firstNameInvalid_fail() throws Exception {
         // GIVEN
         updateRequest.setFirstName("T");
@@ -262,9 +256,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(
-            username = "john123",
-            roles = {"USER"})
+    @WithMockUser(username = "john123")
     void updateUser_lastNameInvalid_fail() throws Exception {
         // GIVEN
         updateRequest.setLastName("T");
@@ -283,9 +275,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(
-            username = "john123",
-            roles = {"USER"})
+    @WithMockUser(username = "john123")
     void updateUser_dobInvalid_fail() throws Exception {
         // GIVEN
         dob = LocalDate.of(2020, 1, 1);
@@ -303,48 +293,42 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("message").value("Your age must be at least 16"));
     }
 
-
-    //get All Users
+    // get All Users
     @Test
     @WithMockUser(
             username = "john123",
             roles = {"ADMIN"})
     void getAllUser_valid_success() throws Exception {
         // GIVEN
-        Mockito.when(userService.getUsers())
-                .thenReturn(List.of(userResponse));
+        Mockito.when(userService.getUsers()).thenReturn(List.of(userResponse));
 
         // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders.get("/users")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("result[0].id").value("de2b8428-15fe-49cd-82c3"))
                 .andExpect(MockMvcResultMatchers.jsonPath("result[0].userName").value("john123"))
                 .andExpect(MockMvcResultMatchers.jsonPath("result[0].firstName").value("John"))
                 .andExpect(MockMvcResultMatchers.jsonPath("result[0].lastName").value("Doe"))
-                .andExpect(
-                        MockMvcResultMatchers.jsonPath("result[0].roles[0].name").value("USER"));
+                .andExpect(MockMvcResultMatchers.jsonPath("result[0].roles[0].name")
+                        .value("USER"));
     }
 
     @Test
     void getAllUser_unauthorized_fail() throws Exception {
         // GIVEN
-        Mockito.when(userService.getUsers())
-                .thenReturn(List.of(userResponse));
+        Mockito.when(userService.getUsers()).thenReturn(List.of(userResponse));
 
         // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders.get("/users")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value(1007))
                 .andExpect(MockMvcResultMatchers.jsonPath("message").value("Unauthenticated"));
     }
 
-
-    //Get User By Id
+    // Get User
     @Test
-    @WithMockUser( username = "john123")
+    @WithMockUser(username = "john123")
     void getUserById_valid_success() throws Exception {
         // GIVEN
         dob = LocalDate.of(1990, 1, 1);
@@ -365,7 +349,7 @@ public class UserControllerTest {
                         MockMvcResultMatchers.jsonPath("result.roles[0].name").value("USER"));
     }
 
-    //Delete User By Id
+    // Delete User By Id
     @Test
     @WithMockUser(username = "john123")
     void deleteUserById_valid_success() throws Exception {
@@ -377,9 +361,10 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/{userId}", "de2b8428-15fe-49cd-82c3")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(successMessage));}
+                .andExpect(MockMvcResultMatchers.content().string(successMessage));
+    }
 
-    //Delete User By Id
+    // Delete User By Id
     @Test
     void deleteUserById_unauthenticated_fail() throws Exception {
         // GIVEN

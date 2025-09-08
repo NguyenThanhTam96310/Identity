@@ -24,8 +24,10 @@ public class PermissionService {
     PermissionMapper permissionMapper;
 
     public PermissionResponse create(PermissionRequest request) {
+        log.info("Per service: create");
         Permission permission = permissionMapper.toPermission(request);
         permission = permissionRepository.save(permission);
+        log.info("Permissions in DB: {}", permission);
         return permissionMapper.toPermissionResponse(permission);
     }
 
@@ -34,7 +36,7 @@ public class PermissionService {
         return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
     }
 
-    public void delete(String name) {
-        permissionRepository.deleteById(name);
+    public void delete(String permission) {
+        permissionRepository.deleteById(permission);
     }
 }

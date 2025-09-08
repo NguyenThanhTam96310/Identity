@@ -21,11 +21,19 @@ public class GlobalexceptionHander {
 
     private static final String MIN_ATTRIBUTES = "min";
 
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = RuntimeException.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException ex) {
         ApiResponse response = new ApiResponse();
         response.setCode(ErrorCode.UNKNOWN_ERROR.getCode());
-        response.setMessage(ErrorCode.UNKNOWN_ERROR.getMessage());
+        response.setMessage(ex.getMessage());
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ApiResponse> handlingException(Exception ex) {
+        ApiResponse response = new ApiResponse();
+        response.setCode(ErrorCode.UNKNOWN_ERROR.getCode());
+        response.setMessage(ex.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
 

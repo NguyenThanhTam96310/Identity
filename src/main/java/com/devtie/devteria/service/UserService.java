@@ -91,6 +91,7 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.deleteById(userId);
     }
 }

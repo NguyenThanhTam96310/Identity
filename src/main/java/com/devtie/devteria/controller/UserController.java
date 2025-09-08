@@ -4,7 +4,6 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,11 +42,11 @@ public class UserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() {
-//        var authenticattion = SecurityContextHolder.getContext().getAuthentication();
-//        log.info("UserName: {}", authenticattion.getName());
-//        authenticattion.getAuthorities().forEach(authority -> {
-//            log.info("roles: {}", authority.getAuthority());
-//        });
+        //        var authenticattion = SecurityContextHolder.getContext().getAuthentication();
+        //        log.info("UserName: {}", authenticattion.getName());
+        //        authenticattion.getAuthorities().forEach(authority -> {
+        //            log.info("roles: {}", authority.getAuthority());
+        //        });
 
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())

@@ -37,7 +37,6 @@ public class PermissionControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
     @MockitoBean
     private PermissionService permissionService;
 

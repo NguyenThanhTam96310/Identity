@@ -73,7 +73,7 @@ public class AuthencationService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassWord(), user.getPassWord());
         if (!authenticated) {
-            throw new AppException(ErrorCode.INVALID_CREDENTIALS);
+            throw new AppException(ErrorCode.USERNAME_OR_PASSWORD_NOT_MATCH);
         }
         var token = generateToken(user);
         return AuthenticationResponse.builder().authenticated(true).token(token).build();
@@ -176,12 +176,12 @@ public class AuthencationService {
         // lấy id toke
         var jit = signJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signJWT.getJWTClaimsSet().getExpirationTime();
-        // loguot cho token cu
+        // logout cho token cu
         InvalidatedToken invalidatedToken =
                 InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
         invalidatedTokenRepository.save(invalidatedToken);
 
-        // get User
+        //
         var username = signJWT.getJWTClaimsSet().getSubject();
         var user =
                 userRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));

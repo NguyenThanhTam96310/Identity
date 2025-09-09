@@ -66,7 +66,7 @@ public class UserService {
 
     @PostAuthorize("returnObject.userName == authentication.name") // người dùng hiện tại mới có quyền truy cập
     public UserResponse getUserById(String userId) {
-        log.info("In method getUserbyId with userId: {}", userId);
+        log.info("In method getUserById with userId: {}", userId);
         return userMapper.toUserResponse(userRepository
                 .findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId)));

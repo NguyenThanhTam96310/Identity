@@ -8,13 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 import com.devtie.devteria.constant.PredefinedRole;
-import com.devtie.devteria.dto.request.RoleRequest;
 import com.devtie.devteria.dto.request.UserUpdateRequest;
-import com.devtie.devteria.dto.response.PermissionResponse;
-import com.devtie.devteria.dto.response.RoleResponse;
 import com.devtie.devteria.entity.Role;
 import com.devtie.devteria.repository.RoleRepository;
 import org.assertj.core.api.Assertions;
@@ -62,8 +58,7 @@ public class UserServiceTest {
     private User user;
     private LocalDate dob;
     private Role userRole;
-    private RoleRequest roleRequest;
-    private RoleResponse roleResponse;
+
 
     @BeforeEach
         // chạy phương thức này đầu tiên trc khi chạy test kh
@@ -76,7 +71,6 @@ public class UserServiceTest {
                 .passWord("12345678")
                 .dob(dob)
                 .build();
-
         userResponse = UserResponse.builder()
                 .id("de2b8428-15fe-49cd-82c3")
                 .userName("john123")
@@ -94,25 +88,6 @@ public class UserServiceTest {
         userRole = Role.builder()
                 .name("USER")
                 .description("User role")
-                .build();
-//        adminRole = Role.builder()
-//                .name("ADMIN")
-//                .description("Admin role")
-//                .build();
-        roleRequest = RoleRequest.builder()
-                .name("USER")
-                .description("User role")
-                .permissions(Set.of("READ_POST"))
-                .build();
-        roleResponse = RoleResponse.builder()
-                .name("USER")
-                .description("User role")
-                .permissions(Set.of(
-                        PermissionResponse.builder()
-                                .name("READ_POST")
-                                .description("Read post permission")
-                                .build()
-                ))
                 .build();
         updateRequest = UserUpdateRequest.builder()
                 .firstName("John")
@@ -146,7 +121,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void createUser_userExisted_fail() {
+    void createUser_userExisted_error() {
         // Given
         //        Mockito.when(userRepository.existsByUserName(anyString())).thenReturn(true);
         Mockito.when(userRepository.save(any(User.class)))

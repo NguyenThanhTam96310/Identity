@@ -79,7 +79,7 @@ public class AuthencationService {
         return AuthenticationResponse.builder().authenticated(true).token(token).build();
     }
 
-    private String generateToken(User user) {
+    protected String generateToken(User user) {
         // header chứa thông tin về thuật toán mã hóa và các thông tin khác
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -119,7 +119,7 @@ public class AuthencationService {
                 .build();
     }
 
-    private SignedJWT verityToken(String token, boolean isRefresh) throws JOSEException, ParseException {
+    protected SignedJWT verityToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         // Kiểm tra còn hiệu lực hay không
         JWSVerifier verifier = new MACVerifier(SECRET_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
@@ -164,7 +164,7 @@ public class AuthencationService {
                     InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
             invalidatedTokenRepository.save(invalidatedToken);
         } catch (AppException e) {
-            log.info("Token alreadly expired");
+            throw new AppException(ErrorCode.TOKEN_ALREADY_EXPIRED);
         }
     }
 
@@ -173,7 +173,7 @@ public class AuthencationService {
         var signJWT = verityToken(request.getToken(), true);
 
         // thực hiện refresh
-        // lấy id toke
+        // lấy id token
         var jit = signJWT.getJWTClaimsSet().getJWTID();
         var expiryTime = signJWT.getJWTClaimsSet().getExpirationTime();
         // logout cho token cu

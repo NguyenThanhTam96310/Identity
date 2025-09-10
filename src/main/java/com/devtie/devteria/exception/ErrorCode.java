@@ -18,6 +18,7 @@ public enum ErrorCode {
     USERNAME_OR_PASSWORD_NOT_MATCH(1006, "Username or password does not match", HttpStatus.UNAUTHORIZED),
     UNAUTHENTICATED(1007, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1008, "You do not have permission", HttpStatus.FORBIDDEN),
+    TOKEN_ALREADY_EXPIRED(1009, "Token already expired", HttpStatus.BAD_REQUEST),
 
     // invalid request errors
     INVALID_KEY(2001, "Invalid key", HttpStatus.BAD_REQUEST),
